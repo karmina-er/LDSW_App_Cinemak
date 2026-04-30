@@ -1,86 +1,87 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const PerfilPeliculasSimple());
+  runApp(const CinemakApp());
 }
 
-class PerfilPeliculasSimple extends StatelessWidget {
-  const PerfilPeliculasSimple({super.key});
+class CinemakApp extends StatelessWidget {
+  const CinemakApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Mi Perfil de Películas'),
-          backgroundColor: Colors.redAccent,
-        ),
-        body: Center(
-          // 1. CONTAINER: El cuadro gris principal (la tarjeta del perfil)
-          child: Container(
-            width: 300,
-            padding: const EdgeInsets.all(20),
-            color: Colors.grey[200],
+      home: HomeScreen(),
+    );
+  }
+}
 
-            // 2. COLUMN: Acomoda la foto, el nombre y los datos de arriba a abajo
-            child: Column(
-              mainAxisSize: MainAxisSize.min, // Hace que no ocupe toda la pantalla, solo lo necesario
-              children: [
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
-                // 3. STACK: Apilamos un emoji de cine sobre un cuadro negro (simulando la foto)
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      width: 100,
-                      height: 100,
-                      color: Colors.black87,
-                    ),
-                    const Text(
-                      '🎬', // Emoji de cine flotando encima del cuadro
-                      style: TextStyle(fontSize: 50),
-                    ),
-                  ],
-                ),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
 
-                const SizedBox(height: 20), // Un espacio en blanco
-
-                // 4. TEXT: El nombre del usuario y su biografía
-                const Text(
-                  'Usuario Tammy',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const Text(
-                  'Me encantan las películas de acción',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-
-                const SizedBox(height: 20), // Un espacio en blanco
-
-                // 5. ROW: Acomoda las estadísticas de izquierda a derecha
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // Primer dato
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      color: Colors.white,
-                      child: const Text('Vistas: 150'),
-                    ),
-                    // Segundo dato
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      color: Colors.white,
-                      child: const Text('Reseñas: 42'),
-                    ),
-                  ],
-                ),
-
-              ],
+          // Imagen de fondo
+          SizedBox.expand(
+            child: Image.asset(
+              'assets/fondo.png',
+              fit: BoxFit.cover,
             ),
           ),
-        ),
+
+          // Filtro oscuro
+          Container(
+            color: Colors.black.withOpacity(0.5),
+          ),
+
+          //  Contenido centrado (reutilizando tu idea de Column)
+          Center(
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              color: Colors.black.withOpacity(0.3),
+
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+
+                  //  Icono
+                  Icon(
+                    Icons.movie,
+                    size: 80,
+                    color: Colors.redAccent,
+                  ),
+
+                  SizedBox(height: 20),
+
+                  //  Texto Bienvenida
+                  Text(
+                    'Bienvenida',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  SizedBox(height: 10),
+
+                  // Nombre de la app
+                  Text(
+                    'Cinemak',
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.redAccent,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
