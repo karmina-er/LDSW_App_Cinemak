@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const CinemakApp());
@@ -38,7 +40,7 @@ class HomeScreen extends StatelessWidget {
             color: Colors.black.withOpacity(0.5),
           ),
 
-          //  Contenido centrado (reutilizando tu idea de Column)
+          // Contenido centrado
           Center(
             child: Container(
               padding: const EdgeInsets.all(20),
@@ -46,19 +48,19 @@ class HomeScreen extends StatelessWidget {
 
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
 
-                  //  Icono
-                  Icon(
+                  // Icono
+                  const Icon(
                     Icons.movie,
                     size: 80,
                     color: Colors.redAccent,
                   ),
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                  //  Texto Bienvenida
-                  Text(
+                  // Texto Bienvenida
+                  const Text(
                     'Bienvenida',
                     style: TextStyle(
                       fontSize: 30,
@@ -67,14 +69,46 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Nombre de la app
-                  Text(
+                  const Text(
                     'Cinemak',
                     style: TextStyle(
                       fontSize: 24,
                       color: Colors.redAccent,
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  // BOTON
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 15,
+                      ),
+                    ),
+
+                    onPressed: () {
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MarvelScreen(),
+                        ),
+                      );
+
+                    },
+
+                    child: const Text(
+                      'Ver peliculas',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],
@@ -82,6 +116,125 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class MarvelScreen extends StatefulWidget {
+  const MarvelScreen({super.key});
+
+  @override
+  State<MarvelScreen> createState() => _MarvelScreenState();
+}
+
+class _MarvelScreenState extends State<MarvelScreen> {
+
+  List peliculas = [];
+
+  // PON AQUI TU API KEY REAL
+  final String apiKey = 'c4dc969c988d55f28141c6048f74010a';
+
+  @override
+  void initState() {
+    super.initState();
+    obtenerPeliculas();
+  }
+
+  Future<void> obtenerPeliculas() async {
+
+    String url =
+        'https://api.themoviedb.org/3/movie/popular?api_key=$apiKey&language=es-MX&page=1';
+
+    final response = await http.get(
+      Uri.parse(url),
+    );
+
+    if (response.statusCode == 200) {
+
+      final data = jsonDecode(response.body);
+
+      setState(() {
+
+        peliculas = data['results'];
+
+      });
+
+    } else {
+
+      print('Error al cargar peliculas');
+
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+
+      backgroundColor: Colors.black,
+
+      appBar: AppBar(
+        backgroundColor: Colors.redAccent,
+        title: const Text('Películas'),
+      ),
+
+      body: peliculas.isEmpty
+
+          ? const Center(
+        child: CircularProgressIndicator(),
+      )
+
+          : ListView.builder(
+
+        itemCount: peliculas.length,
+
+        itemBuilder: (context, index) {
+
+          final pelicula = peliculas[index];
+
+          String poster = pelicula['poster_path'] != null
+              ? 'https://image.tmdb.org/t/p/w500${pelicula['poster_path']}'
+              : '';
+
+          return Card(
+            color: Colors.grey[900],
+            margin: const EdgeInsets.all(10),
+
+            child: ListTile(
+
+              leading: poster.isNotEmpty
+                  ? Image.network(
+                poster,
+                width: 50,
+                fit: BoxFit.cover,
+              )
+                  : const Icon(
+                Icons.movie,
+                color: Colors.white,
+              ),
+
+              title: Text(
+                pelicula['title'],
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+
+              subtitle: Text(
+                pelicula['overview'],
+
+                maxLines: 2,
+
+                overflow: TextOverflow.ellipsis,
+
+                style: const TextStyle(
+                  color: Colors.white70,
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
