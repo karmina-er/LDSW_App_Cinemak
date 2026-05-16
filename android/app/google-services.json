@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "260526769726",
+    "project_id": "app-cinemak",
+    "storage_bucket": "app-cinemak.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260526769726:android:1b4a46048c5fc384d7736f",
+        "android_client_info": {
+          "package_name": "com.example.primer_proyecto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdu4rz6rmH9fiV67QIQPFsbFpRVrcUWeY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

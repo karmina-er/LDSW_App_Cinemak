@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-void main() {
+import 'package:firebase_core/firebase_core.dart'; // 1. Importa el paquete básico de Firebase
+
+void main() async {
+  // 2. Asegura que los componentes nativos de Android/Flutter estén listos
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 3. Inicializa Firebase de forma nativa usando el archivo google-services.json
+  await Firebase.initializeApp();
+
   runApp(const CinemakApp());
 }
 
